@@ -1,0 +1,54 @@
+:root{
+    --container-height:300px;
+    --container-width: 200px;
+    --second-child: rgb(221,239,221);
+    --selected-color: deepskyblue;
+}
+
+* {
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    text-align: center;
+
+}
+
+h1{
+    text-align:center;
+    justify-content: center;
+    width:100%;
+    height:50%;
+}
+
+h3{
+    border: 1px solid black;
+}
+
+.content{
+    width:100%;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+#availableCourse, #selectedCourse{
+    height: var(--container-height);
+    width: var(--container-width);
+    border: 1px solid black;
+    text-align: center;
+}
+
+ul li{
+    list-style-type: none;
+    border: 1px solid black;
+}
+
+ul li:nth-child(2n) {
+    background-color: var(--second-child);
+}
+
+
+
