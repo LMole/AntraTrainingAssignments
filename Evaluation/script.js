@@ -7,7 +7,7 @@ const View = (() => {
     };
 
     const createCourse = (array) =>{
-        let render = "";
+        let render = '';
         let courseType = "Elective";
         array.forEach((course) =>{
             if(course.required ==true){
@@ -16,12 +16,12 @@ const View = (() => {
             else{
                 courseType = "Elective";
             }
-            render =+ `<li>
-            <p>${course.courseName}</p>
-            <p>Course Type: ${courseType}</p>
-            <p>Course Credit: ${course.credit}</p>
+            render += `<li id="${course.courseId}">
+            ${course.courseName}<br>
+            Course Type: ${courseType}<br>
+            Course Credit: ${course.credit}
             </li>`;
-        })
+        });
         return render;
     };
 
@@ -52,6 +52,7 @@ const Model = ((api,view) =>{
 
         set courseList(list){
             this.#courseList = [...list];
+            console.log(this.#courseList);
 
             const availableCourse = document.querySelector('#availableCourse');
             const tmp = view.createCourse(this.#courseList);
@@ -59,10 +60,11 @@ const Model = ((api,view) =>{
         }
     }
 
-    const getCourseList = api.getCourses;
+    const {getCourses, courses} = api;
     
     return {
-        getCourseList,
+        getCourses,
+        courses,
         State,
     };
 })(api,View);
@@ -71,18 +73,58 @@ const Model = ((api,view) =>{
 /*--------------CONTROLLER---------------*/
 const Controller = ((model) =>{
     const state = new model.State();
+    const selected = [];
+
     const init = () =>{
-        model.getCourseList().then((courselist) =>{
+        model.getCourses().then((courselist) =>{
             state.courseList = [...courselist];
         });
+    };
+
+    const updateCredits = () =>{
+        let credits = 0;
         
+        let data = model.courses[0];
+        selected.forEach(s =>{ 
+            credits += data.find(element => element.courseId == s).credit;
+            //console.log(credits);
+        });
+        let totalCredits = document.getElementById('credits');
+        totalCredits.innerHTML = `Total Credits: ${credits}`;
+    };
+
+    const selectCourse = () =>{
+        const classList = document.querySelector('#availableCourse');
+        classList.addEventListener("click", ((event)=>{
+            let selecting = document.querySelectorAll('li')[event.target.id-1];
+            if(!selected.includes(event.target.id)){
+                selecting.style.background = "deepskyblue";
+                selected.push(event.target.id);
+                console.log(selected);
+            }else{
+                if(event.target.id %2 ==0){
+                    selecting.style.background = 'rgb(221,239,221)';
+                }else{
+                    selecting.style.background = 'white';
+                }
+                let index = selected.indexOf(+event.target.id);
+                selected.splice(index,1);
+            }
+
+            updateCredits();
+        }));
+    }
+
+    const onload = () =>{
+        init();
+        selectCourse();
     };
     return {
-        init,
+        onload,
     }
 
 })(Model);
 
-Controller.init();
+Controller.onload();
 
 
