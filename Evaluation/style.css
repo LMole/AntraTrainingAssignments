@@ -24,8 +24,12 @@ h1{
     padding:2%;
 }
 
-h3{
-    border: 1px solid black;
+h4{
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    padding-top:10px;
+    padding-bottom:10px;
 }
 
 .content{
@@ -55,6 +59,12 @@ ul li:nth-child(2n) {
 
 #credits{
     font-weight: 8px;
+}
+
+.confirmSelect{
+    display: flex;
+    justify-content: center;
+    gap:5px;
 }
 
 

@@ -105,7 +105,7 @@ const Controller = ((model) =>{
             return false; //fail to add the course
         }
         let totalCredits = document.getElementById('credits');
-        totalCredits.innerHTML = `Total Credits: ${credits}`;
+        totalCredits.innerHTML = `Total Credits: ${credits} `;
         return true;
     };
 

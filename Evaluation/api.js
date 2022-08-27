@@ -9,7 +9,6 @@ export const api= (() => {
         fetch(baseUrl+'/courseList').then((response) => response.json()).then((data) => courses.push(data));
     })();
 
-
     return {
         getCourses,
         courses,
