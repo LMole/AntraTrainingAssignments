@@ -18,7 +18,7 @@ const View = (() => {
             else{
                 courseType = "Elective";
             }
-            render += `<li id="${course.courseId}">
+            render += `<li id="c${course.courseId}">
             ${course.courseName}<br>
             Course Type: ${courseType}<br>
             Course Credit: ${course.credit}
@@ -82,7 +82,7 @@ const Model = ((api,view) =>{
 /*--------------CONTROLLER---------------*/
 const Controller = ((model) =>{
     const state = new model.State();
-    const selected = [];
+    const selected = []; //an array of all classes being selected by user
     let credits = 0;
 
     //this sets up the initial state for the course list
@@ -95,8 +95,9 @@ const Controller = ((model) =>{
     //this updates the credits as user selects a course from the available course list
     const updateCredits = () =>{
         credits =0; //to reset credits for counting
-
+        console.log(selected);
         selected.forEach(s =>{ 
+     
             credits +=s.credit;
         });
 
@@ -115,17 +116,17 @@ const Controller = ((model) =>{
         const classList = document.querySelector('#availableCourse');
 
         classList.addEventListener("click", ((event)=>{
-            let selecting = document.querySelectorAll('li')[event.target.id-1]; //get the element
+            let selecting = document.querySelector("#"+event.target.id); 
 
             if(!selected.find(element => element.courseId == event.target.id)){ //check if the course is already been selected
-                let c = model.courses[0].find(element => element.courseId == event.target.id);
+                let c = model.courses[0].find(element => ("c"+ element.courseId) == event.target.id);
                 selected.push(c); //add the course to the selected list
 
                 if(!updateCredits()){ //check if overload
-                    selected.splice(selected.indexOf(c),1);
+                    selected.splice(selected.indexOf(c),1); //remove the course if overload
                 }else{ //not overload
                     selecting.style.background = "deepskyblue";
-                    //console.log(selected);
+                
                 }
             }else{ //unselect class
                 if(event.target.id %2 ==0){
@@ -155,7 +156,7 @@ const Controller = ((model) =>{
                         })
                     });
                     //console.log(newCourses);
-                    state.courseList = [...newCourses];
+                    state.courseList = [...newCourses]; //reset the available course list on page
                 });
                 btn.disabled = true;  
             }
